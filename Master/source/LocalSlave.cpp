@@ -39,7 +39,7 @@ void initLocal(Slave* slave, int threads, uint8_t multi) {
 	fprintf(stderr, "subme = 4\n");
 	fprintf(stderr, "hash = none\n");
 	fprintf(stderr, "owf = %i\n", parameters.owf);
-	fprintf(stderr, "slicer = %i,%i,%i,%i\n", slave->roi->x, slave->roi->y, video.resolution.first, video.resolution.second);
+	fprintf(stderr, "partial_coding = %i,%i,%i,%i\n", slave->roi->x, slave->roi->y, video.resolution.first, video.resolution.second);
 	if (parameters.tiles != "") {
 		fprintf(stderr, "tiles = %s\n", parameters.tiles.c_str());
     fprintf(stderr, "wpp = off\n");
@@ -86,10 +86,10 @@ void initLocal(Slave* slave, int threads, uint8_t multi) {
   if (parameters.owf >= 0) {
     config_->owf = parameters.owf;
   }
-	config_->slicer.fullWidth = video.resolution.first;
-	config_->slicer.fullHeight = video.resolution.second;
-	config_->slicer.startCTU_x = slave->roi->x;
-	config_->slicer.startCTU_y = slave->roi->y;
+	config_->partial_coding.fullWidth = video.resolution.first;
+	config_->partial_coding.fullHeight = video.resolution.second;
+	config_->partial_coding.startCTU_x = slave->roi->x;
+	config_->partial_coding.startCTU_y = slave->roi->y;
 
 	if (parameters.intra != 0 && config_->intra_period < config_->gop_len) {
     fprintf(stderr, "Gop changed to 'lp-g4d4t1', because intra period was shorter than gop length.\n");

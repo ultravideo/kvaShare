@@ -1,0 +1,3 @@
+[submodule "kvazaar"]
+	path = kvazaar
+	url = https://github.com/ultravideo/kvazaar.git
