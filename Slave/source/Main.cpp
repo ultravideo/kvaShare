@@ -24,7 +24,7 @@ kvz_config *config_;
 kvz_encoder *enc;
 
 std::mutex mutex, read_mutex, write_mutex;
-std::condition_variable read_cv, write_cv, doge_cv, broadcast_cv, receive_cv, slave_cv;
+std::condition_variable read_cv, write_cv, doge_cv, receive_cv, slave_cv;
 uint32_t SLICE_WIDTH = 0;
 uint32_t SLICE_HEIGHT = 0;
 uint8_t multiframe = 1;
@@ -374,7 +374,6 @@ int main(int argc, char *argv[]) {
 		PrintError("Option receive function failed");
 		Quit(&sendSocket, &recvSocket, "Option receive failed");
 	}
-	broadcast_cv.notify_one();
 
 	if (!silent) {
 		fprintf(stderr, "Options: %s\n", options);
@@ -433,7 +432,7 @@ int main(int argc, char *argv[]) {
 	if (!silent) {
 		fprintf(stderr, "Options received!\n");
 	}
-	//broadcaster.join();
+
 	YUV_size = SLICE_WIDTH*SLICE_HEIGHT + (SLICE_WIDTH*SLICE_HEIGHT >> 1);
 	y_block = SLICE_WIDTH*SLICE_HEIGHT;
 
