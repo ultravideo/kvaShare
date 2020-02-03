@@ -476,10 +476,10 @@ int main(int argc, char *argv[]) {
     config_->owf = owf;
   }
 	//config_->sao_enable = 1;
-	config_->slicer.startCTU_x = slicer[0];
-	config_->slicer.startCTU_y = slicer[1];
-	config_->slicer.fullWidth = slicer[2];
-	config_->slicer.fullHeight = slicer[3];
+	config_->partial_coding.startCTU_x = slicer[0];
+	config_->partial_coding.startCTU_y = slicer[1];
+	config_->partial_coding.fullWidth = slicer[2];
+	config_->partial_coding.fullHeight = slicer[3];
 
 	if (intraPeriod != 0 && config_->intra_period < (int)config_->gop_len) {
 		api_->config_parse(config_, "gop", "lp-g4d4t1");
