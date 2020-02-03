@@ -4,6 +4,8 @@ Distributed encoding framework for kvazaar.
 
 With this one can distribute the encoding of a video to several computers to speedup the process massively.
 
+When cloning the repository, make sure that you use depth 1 (--depth 1) to include the submodule.
+
 ## Usage
 ### Master
 With -help the program prints out all the commands that can be used in the master program.
@@ -14,14 +16,15 @@ With -help the program prints out all the commands that can be used in the maste
     "KvaShare.exe -i input.yuv -o test.265 -ip 127.0.0.1 -r 1"
 
 ### Slave
-There is no mandatory options for slave program, so if default port is used, one can just start the executable
+There is no mandatory options for slave program, so if default port is used, one can just start the executable.
 
 ## Building
 
 - Open kvazaar solution (.sln) under kvazaar/build.
 - Select Release and x64 for target.
 - Right click kvazaar_lib and select properties.
-  - Under General change Configuration Type to "Dynamic Library (.dll)"
+  - Under General change Configuration Type to "Dynamic Library (.dll)".
+    - Also make sure that the Platform Toolset and Windows SDK Version are the ones that you are using.
   - Under C/C++ -> Preprocessor add "PIC" into the Preprocessor Definitions.
 - Right click the kvazaar_lib and select "build".
 - When a build is complete, there should be kvazaar_lib.dll and kvazaar_lib.lib in the kvazaar/build/x64-Release-libs.
