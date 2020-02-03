@@ -189,23 +189,44 @@ void initSockets(std::vector<std::string>* IPVector, std::vector<std::string>* r
   // Create init sockets
   for (unsigned int i = 0; i < IPVector->size(); i++) {
     Slave* tempSlave = new Slave;
+    bool sockopt = true;
     tempSlave->slaveIP = (*IPVector)[i];
     if ((*IPVector)[i] != "127.0.0.1") {
       tempSlave->slaveSocketSend = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-      setsockopt(tempSlave->slaveSocketSend, IPPROTO_TCP, TCP_NODELAY, (char*)1, sizeof(int));
+      if (tempSlave->slaveSocketSend < 0) {
+        fprintf(stderr, "Failed to create a send socket. (%i)\n", WSAGetLastError());
+        Quit(slaveVector);
+      }
+      if (setsockopt(tempSlave->slaveSocketSend, IPPROTO_TCP, TCP_NODELAY, (char*)&sockopt, sizeof(bool)) != 0) {
+        fprintf(stderr, "Failed to set send socket options. (%i)\n", WSAGetLastError());
+        Quit(slaveVector);
+      }
       struct sockaddr_in* sendAddress = new (struct sockaddr_in);
       sendAddress->sin_family = AF_INET;
       sendAddress->sin_addr.s_addr = inet_addr((*IPVector)[i].c_str());
       sendAddress->sin_port = htons(port);
-      connect(tempSlave->slaveSocketSend, (struct sockaddr *) sendAddress, sizeof(*sendAddress));
+      if(connect(tempSlave->slaveSocketSend, (struct sockaddr *) sendAddress, sizeof(*sendAddress)) != 0) {
+        fprintf(stderr, "Failed to connect the send socket. (%i)\n", WSAGetLastError());
+        Quit(slaveVector);
+      }
 
       tempSlave->slaveSocketRecv = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-      setsockopt(tempSlave->slaveSocketRecv, IPPROTO_TCP, TCP_NODELAY, (char*)1, sizeof(int));
+      if (tempSlave->slaveSocketRecv < 0) {
+        fprintf(stderr, "Failed to create a recv socket. (%i)\n", WSAGetLastError());
+        Quit(slaveVector);
+      }
+      if(setsockopt(tempSlave->slaveSocketRecv, IPPROTO_TCP, TCP_NODELAY, (char*)&sockopt, sizeof(bool)) != 0) {
+        fprintf(stderr, "Failed to set recv socket options. (%i)\n", WSAGetLastError());
+        Quit(slaveVector);
+      }
       struct sockaddr_in* recvAddress = new (struct sockaddr_in);
       recvAddress->sin_family = AF_INET;
       recvAddress->sin_addr.s_addr = inet_addr((*IPVector)[i].c_str());
       recvAddress->sin_port = htons(port + 1);
-      connect(tempSlave->slaveSocketRecv, (struct sockaddr *) recvAddress, sizeof(*recvAddress));
+      if(connect(tempSlave->slaveSocketRecv, (struct sockaddr *) recvAddress, sizeof(*recvAddress)) != 0) {
+        fprintf(stderr, "Failed to connect the recv socket. (%i)\n", WSAGetLastError());
+        Quit(slaveVector);
+      }
     }
     else {
       tempSlave->slaveSocketSend = 0;
