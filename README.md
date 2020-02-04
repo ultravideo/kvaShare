@@ -4,7 +4,7 @@ Distributed encoding framework for kvazaar.
 
 With this one can distribute the encoding of a video to several computers to speedup the process massively.
 
-When cloning the repository, make sure that you use depth 1 (--depth 1) to include the submodule.
+When cloning the repository, make sure that you use --recursive to include the submodule.
 
 ## Usage
 ### Master
